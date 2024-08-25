@@ -21,7 +21,7 @@ const Page = async ({ params }: PageProps) => {
     
     // console.log('isAlreadyIndexed', isAlreadyIndexed);
     const isAlreadyIndexed = await redis.sismember("indexed-urls", reconstructedUrl);
-
+    const initialMessages=await ragChat.history.getMessages({amount:10,sessionId})
   if (!isAlreadyIndexed) {
     await ragChat.context.add({
       type: "html",
@@ -31,7 +31,7 @@ const Page = async ({ params }: PageProps) => {
     await redis.sadd("indexed-urls", reconstructedUrl);
   }
 
-  return <ChatWrapper sessionId={sessionId} />;
+  return <ChatWrapper sessionId={sessionId} initialMessages={initialMessages} />;
 };
 
 export default Page;
